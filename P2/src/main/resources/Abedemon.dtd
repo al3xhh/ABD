@@ -1,0 +1,16 @@
+<!ELEMENT bd-abedemon (especie+, ataque+)>
+<!ELEMENT especie (nombre, url, descripcion, tipo+, ataques?, evoluciones?)>
+<!ELEMENT ataque (nombre, daño+)>
+<!ELEMENT nombre (#PCDATA)>
+<!ELEMENT url (#PCDATA)>
+<!ELEMENT descripcion (#PCDATA)>
+<!ELEMENT tipo (#PCDATA)>
+<!ELEMENT ataques (tiene-ataque)+>
+<!ELEMENT evoluciones (especie)+>
+<!ELEMENT daño EMPTY>
+<!ELEMENT tiene-ataque EMPTY>
+<!ATTLIST especie id ID #REQUIRED>
+<!ATTLIST tiene-ataque id IDREF #REQUIRED>
+<!ATTLIST ataque id ID #REQUIRED>
+<!ATTLIST daño tipo CDATA #REQUIRED>
+<!ATTLIST daño valor CDATA #REQUIRED>

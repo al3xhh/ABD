@@ -1,0 +1,36 @@
+dni(02733893). % Nombre: Alejandro Huertas Herrero
+
+% 3. Circunscripciones en las que 'Cs' tiene mas de dos escanyos
+cir_ciudadanos(C) :- partido('Cs', _), escanyos(C, 'Cs', NE), NE > 2.
+
+% 5. Comunidades en las que no se ha presentado 'IU-UPeC'.
+ca_no_iu_upec(CA) :- pertenece(P, CA), not(escanyos(P, 'IU-UPeC', _), partido('IU-UPeC', _)).
+
+% 9. Escanyos de cada partido en Galicia
+escanyo_partido(P, N) :- group_by(pertenece(PRO, 'Galicia'), escanyos(PRO, P, NE), [P], N = sum(NE)).
+
+% Parte opcional:
+escanyos_total(P, NE) :- group_by(escanyos(_, P, NES), [P], NE = sum(NES)).
+
+% Definir relacion coalicion.
+coalicion(0, 0, 0).
+coalicion(Coalicion, NumEscanyos, NumPartidos) :- coalicion(C, NE, NP), codigo_partido_escanyos_totales_mascara(Codigo, NEP, Mascara), 
+		NumEscanyos is (NE + NEP), NumPartidos is (NP + 1), Coalicion is C + 2 ** Codigo, NumEscanyos =< 350, NumPartidos =< 7, (C /\ Mascara) \= Mascara.
+
+%Conseguir el código del partido, sus escaños totales y su máscara.	
+codigo_partido_escanyos_totales_mascara(Codigo, NEscanyos, Mascara) :- partido(Partido, Codigo), escanyos_total(Partido, NEscanyos), mascara(Partido, Mascara).
+
+%Máscaras para comprobar si el partido ha sido añadido o no a la coalición.
+mascara('CCa-PNC', 1).
+mascara('Cs', 2).
+mascara('DL', 4).
+mascara('EAJ-PNV', 8).
+mascara('EH Bildu', 16).
+mascara('EN COMU', 32).
+mascara('ERC-CATSI', 64).
+mascara('IU-UPeC', 128).
+mascara('PODEMOS', 256).
+mascara('PODEMOS-COMPROMIS', 512).
+mascara('PODEMOS-En Marea-ANOVA-EU', 1024).
+mascara('PP', 2048).
+mascara('PSOE', 4096).
